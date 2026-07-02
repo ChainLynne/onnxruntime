@@ -263,12 +263,10 @@ if(onnxruntime_USE_TELEMETRY AND NOT WIN32)
     # with "target onnxruntime_common requires target mat that is not in any export set". The vcpkg
     # path links the imported MSTelemetry::mat target, which is exportable and unaffected.
     target_link_libraries(onnxruntime_common PRIVATE $<BUILD_INTERFACE:mat>)
-    # cpp_client_telemetry uses include_directories() (directory-scoped) rather than
-    # target_include_directories(), so include paths don't propagate via target_link_libraries.
-    # Add them explicitly for onnxruntime_common. Mark them SYSTEM so the SDK's public headers are
-    # exempt from onnxruntime_common's -Wall -Wextra -Werror (they trip -Werror=unused-parameter in
-    # NullObjects.hpp / LogManagerProvider.hpp). The vcpkg MSTelemetry::mat path already propagates
-    # its includes as SYSTEM via the imported target.
+    # mat propagates its public include dir as a normal (non-SYSTEM) include, so onnxruntime_common's
+    # -Wall -Wextra -Werror would apply to the SDK's public headers (they trip -Werror=unused-parameter
+    # in NullObjects.hpp / LogManagerProvider.hpp). Re-add the SDK include dirs as SYSTEM to exempt
+    # them; lib is also required for the SDK-internal <api/ContextFieldsProvider.hpp>.
     if(DEFINED cpp_client_telemetry_SOURCE_DIR)
       target_include_directories(onnxruntime_common SYSTEM PRIVATE
         ${cpp_client_telemetry_SOURCE_DIR}/lib/include/public
