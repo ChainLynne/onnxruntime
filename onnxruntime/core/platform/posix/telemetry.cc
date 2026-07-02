@@ -347,6 +347,12 @@ void PosixTelemetry::Initialize() {
   log_manager_ = LogManagerProvider::CreateLogManager("OnnxRuntime", true, *config_, status);
   if (status != STATUS_SUCCESS || !log_manager_) {
     ORT_TELEMETRY_WARN("Failed to create telemetry LogManager, status: " << status);
+    // CreateLogManager can return a live manager alongside a non-success status; release it (and
+    // drop our reference) before destroying config_, which the manager holds a reference to.
+    if (log_manager_ != nullptr) {
+      LogManagerProvider::Release(*config_);
+      log_manager_ = nullptr;
+    }
     config_.reset();
     return;
   }
@@ -377,6 +383,11 @@ void PosixTelemetry::Initialize() {
   auto it = fields.find(COMMONFIELDS_DEVICE_ID);
   if (it != fields.end()) {
     raw_device_id = it->second.to_string();
+  }
+  // If the SDK has not populated a platform device ID, fall back to our own persistent UUID so the
+  // SDK's raw auto-generated identifier is never transmitted un-hashed.
+  if (raw_device_id.empty()) {
+    raw_device_id = DeviceId::Instance().GetValue();
   }
 #else
   // Desktop: use our custom persistent UUID.
