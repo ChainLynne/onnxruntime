@@ -1037,31 +1037,6 @@ if(onnxruntime_USE_TELEMETRY AND NOT WIN32)
       endif()
     endif()
 
-    # The 1DS SDK creates GLOBAL imported targets 'z' and 'sqlite3' without setting
-    # IMPORTED_LOCATION, which causes link errors on cross-compile. For Android,
-    # the 1DS CMake now builds from bundled source. For other platforms, resolve
-    # the imported targets if possible.
-    if(NOT ANDROID)
-      if(TARGET z)
-        get_target_property(_z_loc z IMPORTED_LOCATION)
-        if(NOT _z_loc OR _z_loc STREQUAL "_z_loc-NOTFOUND")
-          find_library(_z_lib z)
-          if(_z_lib)
-            set_target_properties(z PROPERTIES IMPORTED_LOCATION "${_z_lib}")
-          endif()
-        endif()
-      endif()
-      if(TARGET sqlite3)
-        get_target_property(_sqlite3_loc sqlite3 IMPORTED_LOCATION)
-        if(NOT _sqlite3_loc OR _sqlite3_loc STREQUAL "_sqlite3_loc-NOTFOUND")
-          find_library(_sqlite3_lib sqlite3)
-          if(_sqlite3_lib)
-            set_target_properties(sqlite3 PROPERTIES IMPORTED_LOCATION "${_sqlite3_lib}")
-          endif()
-        endif()
-      endif()
-    endif()
-
     set(BUILD_UNIT_TESTS "${BUILD_UNIT_TESTS_SAVED}" CACHE BOOL "" FORCE)
     set(BUILD_FUNC_TESTS "${BUILD_FUNC_TESTS_SAVED}" CACHE BOOL "" FORCE)
     set(BUILD_SAMPLES "${BUILD_SAMPLES_SAVED}" CACHE BOOL "" FORCE)

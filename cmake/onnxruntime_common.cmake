@@ -276,23 +276,9 @@ if(onnxruntime_USE_TELEMETRY AND NOT WIN32)
         ${cpp_client_telemetry_SOURCE_DIR}/lib
       )
     endif()
-    # Platform-specific system libraries required by the 1DS SDK
-    if(APPLE)
-      target_link_libraries(onnxruntime_common PRIVATE
-        "-framework CoreFoundation"
-        "-framework Security"
-        z
-        sqlite3
-      )
-    elseif(ANDROID)
-      target_link_libraries(onnxruntime_common PRIVATE z log)
-    elseif(UNIX)
-      target_link_libraries(onnxruntime_common PRIVATE
-        curl
-        z
-        sqlite3
-      )
-    endif()
+    # mat links its own dependencies — sqlite3/zlib/curl (PRIVATE, so they reach static-library
+    # consumers) plus platform libraries and Android/Apple frameworks (PUBLIC) — so onnxruntime_common
+    # needs no system libraries added here.
   else()
     message(FATAL_ERROR "Telemetry enabled but no 1DS SDK target ('MSTelemetry::mat' or 'mat') was found")
   endif()
