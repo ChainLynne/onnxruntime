@@ -117,6 +117,10 @@
       "version": "1.9.4"
     },
     {
+      "name": "directx-headers",
+      "version": "1.616.0"
+    },
+    {
       "name": "protobuf",
       "version": "3.21.12#4"
     },
