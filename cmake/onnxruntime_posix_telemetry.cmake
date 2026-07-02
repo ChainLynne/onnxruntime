@@ -14,9 +14,9 @@ if(onnxruntime_USE_TELEMETRY AND NOT WIN32)
                             "is provided via the vcpkg port or fetched in onnxruntime_external_deps.cmake.")
     endif()
 
-    message(STATUS "Enabling 1DS telemetry for non-Windows platforms")
+    message(STATUS "Enabling POSIX telemetry for non-Windows platforms")
 
-    # USE_1DS_TELEMETRY is defined on the onnxruntime_common target in onnxruntime_common.cmake
+    # USE_POSIX_TELEMETRY is defined on the onnxruntime_common target in onnxruntime_common.cmake
     # (its only consumer is core/platform/posix/env.cc), so it is not added globally here.
 
     # Platform-specific status messages

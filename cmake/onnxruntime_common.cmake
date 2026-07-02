@@ -159,15 +159,15 @@ if (onnxruntime_USE_TELEMETRY)
   if(WIN32)
     set_target_properties(onnxruntime_common PROPERTIES COMPILE_FLAGS "/FI${ONNXRUNTIME_INCLUDE_DIR}/core/platform/windows/TraceLoggingConfigPrivate.h")
   else()
-    target_compile_definitions(onnxruntime_common PRIVATE USE_1DS_TELEMETRY)
+    target_compile_definitions(onnxruntime_common PRIVATE USE_POSIX_TELEMETRY)
     # The optional tenant-token override is emitted into a generated header in the build tree rather
     # than onto the compiler command line, so an injected token (sourced from a CI secret) does not
-    # leak into compile_commands.json or build logs. DIY builds leave onnxruntime_1DS_TENANT_TOKEN
+    # leak into compile_commands.json or build logs. DIY builds leave onnxruntime_TELEMETRY_TENANT_TOKEN
     # empty, so the header defines nothing and telemetry.cc uses its throwaway default.
-    if(onnxruntime_1DS_TENANT_TOKEN)
-      set(ONNXRUNTIME_1DS_TENANT_TOKEN_DEFINE "#define ORT_1DS_TENANT_TOKEN \"${onnxruntime_1DS_TENANT_TOKEN}\"")
+    if(onnxruntime_TELEMETRY_TENANT_TOKEN)
+      set(ONNXRUNTIME_TELEMETRY_TENANT_TOKEN_DEFINE "#define ORT_TELEMETRY_TENANT_TOKEN \"${onnxruntime_TELEMETRY_TENANT_TOKEN}\"")
     else()
-      set(ONNXRUNTIME_1DS_TENANT_TOKEN_DEFINE "")
+      set(ONNXRUNTIME_TELEMETRY_TENANT_TOKEN_DEFINE "")
     endif()
     set(_ort_telemetry_gen_dir "${CMAKE_CURRENT_BINARY_DIR}/onnxruntime_telemetry")
     configure_file(

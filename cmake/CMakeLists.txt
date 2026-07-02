@@ -146,7 +146,7 @@ option(onnxruntime_USE_TELEMETRY "Build with Telemetry" OFF)
 # Optional 1DS ingestion token for non-Windows telemetry. Leave empty to compile in the default
 # throwaway token from core/platform/posix/telemetry.cc; official pipelines override it at compile
 # time by setting this to the real token (injected from a pipeline secret).
-set(onnxruntime_1DS_TENANT_TOKEN "" CACHE STRING "Override the compiled-in 1DS telemetry ingestion token (non-Windows)")
+set(onnxruntime_TELEMETRY_TENANT_TOKEN "" CACHE STRING "Override the compiled-in telemetry ingestion token (non-Windows)")
 # When building non-Windows telemetry, optionally build the 1DS SDK (cpp-client-telemetry) as a shared
 # library (libmat.so) instead of statically linking it into libonnxruntime. This lets several binaries
 # that link the same SDK (for example onnxruntime and onnxruntime-genai shipped together) share a single
@@ -603,7 +603,7 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/external)
 include(external/onnxruntime_external_deps.cmake)
 
 # 1DS telemetry integration for non-Windows platforms (must come after external deps)
-include(onnxruntime_1ds_telemetry.cmake)
+include(onnxruntime_posix_telemetry.cmake)
 
 set(ORT_WARNING_FLAGS)
 if (WIN32)

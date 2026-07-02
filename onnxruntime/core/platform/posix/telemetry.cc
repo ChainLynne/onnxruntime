@@ -76,14 +76,14 @@ std::atomic<uint32_t> PosixTelemetry::system_metrics_sample_counter_{0};
 //
 // The default below is a throwaway ingestion key so that anyone building ONNX Runtime themselves
 // gets working telemetry by default; it carries no secret and can simply be revoked if abused.
-// Official builds override it via the onnxruntime_1DS_TENANT_TOKEN CMake variable (sourced from a CI
+// Official builds override it via the onnxruntime_TELEMETRY_TENANT_TOKEN CMake variable (sourced from a CI
 // secret), which CMake writes into the generated onnxruntime_telemetry_tenant_token.h included above
 // — in the build tree, not on the compiler command line — so the production token is never committed
 // to source and stays out of compile_commands.json / build logs.
-#ifndef ORT_1DS_TENANT_TOKEN
-#define ORT_1DS_TENANT_TOKEN "5ad963bd4b3a4118a481401cc0211875-da8e8657-47d4-4ed7-ab39-7886e136f53b-6988"
+#ifndef ORT_TELEMETRY_TENANT_TOKEN
+#define ORT_TELEMETRY_TENANT_TOKEN "5ad963bd4b3a4118a481401cc0211875-da8e8657-47d4-4ed7-ab39-7886e136f53b-6988"
 #endif
-constexpr const char* TENANT_TOKEN = ORT_1DS_TENANT_TOKEN;
+constexpr const char* TENANT_TOKEN = ORT_TELEMETRY_TENANT_TOKEN;
 
 // Event priority mapping (1DS priorities)
 enum class EventPriority {
