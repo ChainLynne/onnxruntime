@@ -294,7 +294,7 @@ void PosixTelemetry::Initialize() {
 
   // Environment opt-out: ORT_TELEMETRY_DISABLED set to a truthy value (1/true/yes/on/y,
   // case-insensitive) disables telemetry at runtime without recompiling and skips creating the 1DS
-  // uploader entirely. A single opt-out variable honored by both ONNX Runtime and onnxruntime-genai.
+  // uploader entirely.
   if (const char* env = std::getenv("ORT_TELEMETRY_DISABLED"); env != nullptr) {
     std::string value(env);
     for (char& ch : value) {
@@ -321,7 +321,7 @@ void PosixTelemetry::Initialize() {
   config[CFG_INT_TRACE_LEVEL_MASK] = 0;                      // Disable SDK internal logging
   config[CFG_INT_SDK_MODE] = SdkModeTypes::SdkModeTypes_CS;  // Common Schema 4.0 mode
   // Do not block process teardown to upload; persisted events are sent on the next run. 0 keeps
-  // Shutdown non-blocking and avoids adding exit latency to host apps (matches onnxruntime-genai).
+  // Shutdown non-blocking and avoids adding exit latency to host apps.
   config[CFG_INT_MAX_TEARDOWN_TIME] = 0;
 
   // Configure cache for offline scenarios — use same directory as device ID storage

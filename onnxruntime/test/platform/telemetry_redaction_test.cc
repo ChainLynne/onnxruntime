@@ -39,7 +39,7 @@ TEST(TelemetryRedactionTest, PathsWithSpacesDoNotLeakUsername) {
 }
 
 TEST(TelemetryRedactionTest, MultiSegmentRelativeAndUrlReplaced) {
-  // Matches onnxruntime-genai: a token with 2+ "/x" segments (incl. URLs) is treated as a path.
+  // A token with 2+ "/x" segments (incl. URLs) is treated as a path.
   EXPECT_EQ(ScrubErrorMessage("a/b/c"), "[path]");
   EXPECT_EQ(ScrubErrorMessage("see https://example.com/a/b/c for details"), "see [path] for details");
   EXPECT_EQ(ScrubErrorMessage("input:/home/alice/secret/m.onnx"), "[path]");

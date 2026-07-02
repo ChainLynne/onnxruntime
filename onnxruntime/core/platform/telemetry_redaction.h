@@ -11,8 +11,7 @@ namespace onnxruntime {
 namespace telemetry_detail {
 
 // Returns true if a whitespace-delimited token looks like a filesystem path. Used to redact paths
-// (which embed usernames / directory layout) from error text. Mirrors onnxruntime-genai's
-// Generators::LooksLikePath so both telemetry pipelines scrub error messages identically.
+// (which embed usernames / directory layout) from error text.
 inline bool LooksLikePath(std::string_view token) {
   if (token.find('\\') != std::string_view::npos) {
     return true;  // any backslash: Windows path / UNC
@@ -41,9 +40,7 @@ inline constexpr size_t kMaxTelemetryErrorMessageLength = 256;
 // Scrub filesystem paths out of a free-text error string before transmission and cap its length.
 // Each whitespace-delimited token that looks like a path is replaced with a "[path]" placeholder, so
 // load/runtime exceptions don't ship the user's config/model path (e.g. C:\Users\<name>\... or
-// /home/<name>/...) and thereby the username and directory layout. Mirrors onnxruntime-genai's
-// Generators::ScrubErrorMessage so both pipelines redact identically; the trailing length cap matches
-// the 256-byte guard genai applies at its call sites.
+// /home/<name>/...) and thereby the username and directory layout.
 inline std::string ScrubErrorMessage(std::string_view msg) {
   using telemetry_detail::LooksLikePath;
 
